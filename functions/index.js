@@ -41,7 +41,6 @@ app.get('/:id', async (req, res) => {
 // Create user
 app.post('/', async (req, res) => {
     const user = req.body;
-
     await userCollection.add(user);
 
     res.status(200).send();
