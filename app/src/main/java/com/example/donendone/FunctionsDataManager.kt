@@ -1,4 +1,7 @@
 package com.example.donendone
 
-class FunctionsDataManager {
+const val USER_URL = ""
+
+object FunctionsDataManager {
+
 }
