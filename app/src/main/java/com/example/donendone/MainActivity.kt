@@ -19,13 +19,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var saveButton: Button
     private lateinit var updateButton: Button
     private lateinit var edit_text: EditText
-    private lateinit var retService: UserService
+    private lateinit var userService: UserService
+    private lateinit var postService: PostService
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        getUsers()
+        getPosts()
 
         text_view = findViewById(R.id.goal)
         button = findViewById(R.id.button)
@@ -35,51 +37,123 @@ class MainActivity : AppCompatActivity() {
         updateButton = findViewById(R.id.update_button)
 
 
-        retService = RetrofitInstance
-            .getRetrofitInstance()
+        userService = RetrofitInstance
+                .getRetrofitInstance()
             .create(UserService::class.java)
+
+        postService = RetrofitInstance
+            .getRetrofitInstance()
+            .create(PostService::class.java)
 
 
         button.setOnClickListener() {
             if (edit_text.text != null) {
-                getUser(edit_text.text.toString())
+                getPost(edit_text.text.toString())
             }
         }
 
         saveButton.setOnClickListener() {
             if (edit_text.text != null) {
-                uploadUser(edit_text.text.toString())
+                uploadPost(edit_text.text.toString())
             }
         }
 
         deleteButton.setOnClickListener() {
             if (edit_text.text != null) {
-                deleteUser(edit_text.text.toString())
+                deletePost(edit_text.text.toString())
             }
         }
 
         updateButton.setOnClickListener() {
             if (edit_text.text != null) {
-                updateUser(edit_text.text.toString())
+                updatePost(edit_text.text.toString())
             }
         }
     }
 
-    fun getUser(id: String) {
+    fun getPost(id: String) {
         text_view.text =""
-        val pathResponse : LiveData<Response<UserItem>> = liveData {
-            val response = retService.getOneUser(id)
+        val pathResponse : LiveData<Response<PostItem>> = liveData {
+            val response = postService.getOnePost(id)
             emit(response)
         }
 
         // Get the name of the user when the request has been sent.
         pathResponse.observe(this, Observer{
-            val name = it.body()?.name
-            text_view.append(name)
+            val post = it.body()
+            val result = " "+"Title: ${post?.title}"+"\n"+
+                    " "+"To do: ${post?.content}"
+            text_view.append(result)
         })
     }
 
-    private fun getUsers() {
+    private fun getPosts() {
+        val responseLiveData: LiveData<Response<Posts>> = liveData {
+            val response = postService.getPost()
+            emit(response)
+        }
+
+        // Get the data of all users when the request has been sent.
+        responseLiveData.observe(this, Observer {
+            val posts = it.body()?.listIterator()
+            if (posts!=null) {
+                text_view.text =""
+                while (posts.hasNext()){
+                    val post = posts.next()
+
+                    val result = " "+"Title: ${post.title}"+"\n"+
+                            " "+"To do: ${post.content}"+"\n"+
+                            "Id: ${post.id}"+"\n\n"
+                    text_view.append(result)
+                }
+            }
+        })
+    }
+
+    private fun uploadPost(content: String) {
+        val post = PostItem(null, "A post", content)
+        val postResponse: LiveData<Response<PostItem>> = liveData {
+            val response = postService.uploadPost(post)
+            emit(response)
+        }
+        postResponse.observe(this, Observer {
+            val receivedPostItem = it.body()
+            val result = " "+"Title: ${receivedPostItem?.title}"+"\n"+
+                    " "+"To do: ${receivedPostItem?.content}"
+            text_view.text = result
+
+            val id = receivedPostItem?.id
+            edit_text.setText(id)
+        })
+
+    }
+
+    private fun updatePost (id: String) {
+        val post = PostItem("0", "Updated", "3", true)
+        val postResponse: LiveData<Response<PostItem>> = liveData {
+            val response = postService.updatePost(id, post)
+            emit(response)
+        }
+        postResponse.observe(this, Observer {
+            val receivedPostItem = it.body()
+            val result = " "+"Title: ${receivedPostItem?.title}"+"\n"+
+                    " "+"To do: ${receivedPostItem?.content}"
+            text_view.text = result
+        })
+    }
+
+    private fun deletePost(id: String) {
+        val pathResponse : LiveData<Response<Void>> = liveData {
+            val response = postService.deletePost(id)
+            emit(response)
+        }
+
+        pathResponse.observe(this, Observer{
+            text_view.text = "deleted"
+        })
+    }
+
+/*    private fun getUsers() {
         val responseLiveData: LiveData<Response<Users>> = liveData {
             val response = retService.getUser()
             emit(response)
@@ -139,5 +213,5 @@ class MainActivity : AppCompatActivity() {
         pathResponse.observe(this, Observer{
             text_view.text = "deleted"
         })
-    }
+    }*/
 }
