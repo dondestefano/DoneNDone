@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun uploadPost(content: String) {
-        val post = PostItem(null, "A post", content)
+        val post = PostItem("null", "A post", content)
         val postResponse: LiveData<Response<PostItem>> = liveData {
             val response = postService.uploadPost(post)
             emit(response)
@@ -125,7 +125,6 @@ class MainActivity : AppCompatActivity() {
             val id = receivedPostItem?.id
             edit_text.setText(id)
         })
-
     }
 
     private fun updatePost (id: String) {

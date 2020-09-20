@@ -4,11 +4,11 @@ import com.google.gson.annotations.SerializedName
 
 data class PostItem(
     @SerializedName("id")
-    val id: String?,
+    val id: String,
     @SerializedName("title")
-    val title: String,
+    var title: String,
     @SerializedName("content")
-    val content: String,
+    var content: String,
     @SerializedName("status")
-    val status: Boolean = false
+    var status: Boolean = false
 )
