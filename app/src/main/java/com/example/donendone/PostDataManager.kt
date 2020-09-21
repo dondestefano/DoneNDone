@@ -64,7 +64,6 @@ object PostDataManager {
 
     fun updatePost (lifecycleOwner: LifecycleOwner, postRecycleAdapter: PostRecycleAdapter, post: PostItem) {
         val postResponse: LiveData<Response<PostItem>> = liveData {
-            post.title = "ändrad"
             val response = postService.updatePost(post.id, post)
             emit(response)
         }
