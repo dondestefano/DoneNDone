@@ -12,7 +12,8 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            app:layout_constrainedWidth="true">
 
             <TextView
                 android:id="@+id/textViewTitle"
@@ -20,7 +21,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:textSize="16sp"
+                android:fontFamily="@font/great_sejagad"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="25sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,51 +32,61 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@id/lineBreak"
+                android:fontFamily="@font/inkfree"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="16sp"
+                app:layout_constrainedWidth="true"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="@+id/textViewTitle"/>
+                app:layout_constraintTop_toBottomOf="@+id/textViewTitle" />
 
-            <Button
+            <ImageView
                 android:id="@+id/deleteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toTopOf="@id/updateButton"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:backgroundTint="@color/design_default_color_error"
-                android:text="Delete"/>
+                app:layout_constraintStart_toStartOf="@id/textViewContent"
+                app:layout_constraintTop_toBottomOf="@id/textViewContent"
+                app:layout_constraintBottom_toTopOf="@id/lineBreak"
+                android:src="@drawable/delete_icon"
+                android:tint="@color/common_google_signin_btn_text_light_focused"
+                />
 
-            <Button
+            <ImageView
                 android:id="@+id/updateButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toEndOf="@id/deleteButton"
+                app:layout_constraintTop_toBottomOf="@id/textViewContent"
                 app:layout_constraintBottom_toTopOf="@id/lineBreak"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/updateButton"
-                android:backgroundTint="@color/design_default_color_primary_variant"
-                android:text="Update"/>
+                android:src="@drawable/edit_icon"
+                android:tint="@color/common_google_signin_btn_text_light_focused"/>
 
             <ImageView
                 android:id="@+id/lineBreak"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                app:layout_constraintTop_toBottomOf="@id/updateButton"
+                app:layout_constraintTop_toBottomOf="@id/deleteButton"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:background="@color/colorPrimaryDark"
+                android:background="@color/common_google_signin_btn_text_light_focused"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="10dp"
                 android:contentDescription="Line break" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/statusCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@color/design_default_color_on_secondary"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

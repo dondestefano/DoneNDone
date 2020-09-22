@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
 
         userService = RetrofitInstance
-                .getRetrofitInstance()
+            .getRetrofitInstance()
             .create(UserService::class.java)
 
         postService = RetrofitInstance

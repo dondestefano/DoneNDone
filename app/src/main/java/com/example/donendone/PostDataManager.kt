@@ -27,7 +27,6 @@ object PostDataManager {
                     val post = receivedPosts.next()
                     posts.add(post)
                 }
-
                 postRecycleAdapter.updateItemsToList()
             }
         })
@@ -53,10 +52,11 @@ object PostDataManager {
             val response = postService.uploadPost(post)
             emit(response)
         }
+        //TODO This returns a null object. Fix so that it returns the actual object.
         postResponse.observe(lifecycleOwner, Observer {
             val receivedPostItem = it.body()
-            posts.clear()
             receivedPostItem?.let {  posts.add(receivedPostItem) }
+            posts.sortBy { receivedPostItem!!.status }
 
             postRecycleAdapter.updateItemsToList()
         })

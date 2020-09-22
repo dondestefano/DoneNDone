@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
@@ -31,18 +33,31 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
         holder.postContentText.text = currentPost?.content
         holder.recycleAdapter = this
         holder.pos = position
+
+        when (posts[position].status) {
+            false -> {
+                holder.statusCheckBox.isChecked = false
+            }
+
+            true -> {
+                holder.statusCheckBox.isChecked = true
+            }
+        }
+
     }
 
     fun updateItemsToList() {
         posts = PostDataManager.posts
+        posts.sortBy { it.status }
         notifyDataSetChanged()
     }
 
     inner class ViewHolder(postView: View) : RecyclerView.ViewHolder(postView) {
         val postTitleText: TextView = itemView.findViewById<TextView>(R.id.textViewTitle)
         val postContentText: TextView = itemView.findViewById<TextView>(R.id.textViewContent)
-        val deleteButton: Button = itemView.findViewById<Button>(R.id.deleteButton)
-        val updateButton: Button = itemView.findViewById<Button>(R.id.updateButton)
+        val deleteButton: ImageView = itemView.findViewById<ImageView>(R.id.deleteButton)
+        val updateButton: ImageView = itemView.findViewById<ImageView>(R.id.updateButton)
+        val statusCheckBox: CheckBox = itemView.findViewById<CheckBox>(R.id.statusCheckBox)
         lateinit var recycleAdapter: PostRecycleAdapter
         var pos = 0
 
@@ -97,6 +112,12 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
 
             updateButton.setOnClickListener {
                 showUpdatePostDialog()
+            }
+
+            statusCheckBox.setOnClickListener{
+                var post = posts[pos]
+                post.status =! post.status
+                PostDataManager.updatePost(lifecycleOwner, recycleAdapter, post)
             }
         }
     }
