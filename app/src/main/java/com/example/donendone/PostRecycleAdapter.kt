@@ -3,6 +3,8 @@ package com.example.donendone
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Paint
+import android.text.style.StrikethroughSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +16,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.new_post_dialog.view.*
 import kotlinx.coroutines.delay
+import org.w3c.dom.Text
 
 class PostRecycleAdapter(private val context: Context, private val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<PostRecycleAdapter.ViewHolder>()  {
     private val layoutInflator = LayoutInflater.from(context)
@@ -37,10 +40,14 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
         when (posts[position].status) {
             false -> {
                 holder.statusCheckBox.isChecked = false
+                holder.postTitleText.apply {
+                    paintFlags = paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+                }
             }
 
             true -> {
                 holder.statusCheckBox.isChecked = true
+                holder.postTitleText.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             }
         }
 
@@ -66,12 +73,12 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
             //AlertDialogBuilder.
             val mBuilder = AlertDialog.Builder(context)
                 .setView(customDialogView)
-                .setTitle("Edit To-do")
 
             //Set title and content of the ViewHolders post.
             customDialogView.dialogTitleEditText.setText(postTitleText.text)
             customDialogView.dialogContentEditText.setText(postContentText.text)
             customDialogView.dialogAddButton.text = "Update"
+            customDialogView.dialogTitle.text = "Edit To-do"
 
             val  mAlertDialog = mBuilder.show()
             customDialogView.dialogAddButton.setOnClickListener {

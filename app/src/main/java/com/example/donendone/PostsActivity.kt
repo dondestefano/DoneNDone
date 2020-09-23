@@ -43,7 +43,6 @@ class PostsActivity : AppCompatActivity() {
         //AlertDialogBuilder.
         val mBuilder = AlertDialog.Builder(this)
             .setView(customDialogView)
-            .setTitle("Add new To-do")
         //show dialog.
         val  mAlertDialog = mBuilder.show()
         //login button click of custom layout.
