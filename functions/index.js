@@ -7,6 +7,7 @@ const { onRequest } = require('firebase-functions/lib/providers/https');
 admin.initializeApp();
 const app = express();
 const db = admin.firestore();
+app.use(cors({ origin: ['http://localhost:5000'] }));
 
 // Post functions
 
@@ -42,14 +43,16 @@ app.get('/:id', async (req, res) => {
 
 // Create post
 app.post('/', async (req, res) => {
-    const post = req.body;
-    let docRef = await postCollection.doc();
-    await docRef.set({
-        ...post,
-        id: docRef.id,
-        });
+    const post = (req.body)
 
-    res.status(200).send(docRef);
+    let docRef = postCollection.doc();
+    const newPost = {
+        ...post,
+        id: docRef.id
+    }
+    await docRef.set(newPost);
+
+    res.status(201).send(newPost);
 });
 
 // Update post
