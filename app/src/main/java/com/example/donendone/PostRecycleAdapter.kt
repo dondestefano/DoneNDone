@@ -82,18 +82,25 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
 
             val  mAlertDialog = mBuilder.show()
             customDialogView.dialogAddButton.setOnClickListener {
-                //get text from EditTexts.
-                val postTitle = customDialogView.dialogTitleEditText.text.toString()
-                val postContent = customDialogView.dialogContentEditText.text.toString()
 
-                // Create new post with title, content and temporary ID.
-                val newPost = PostItem(posts[pos].id, postTitle, postContent, posts[pos].status)
+                if (customDialogView.dialogTitleEditText.text.isEmpty()){
+                    val toast = ToastMessage("Please enter a title for your To-do.", context)
+                    toast.errorToast()
+                }
+                else {
+                    //get text from EditTexts.
+                    val postTitle = customDialogView.dialogTitleEditText.text.toString()
+                    val postContent = customDialogView.dialogContentEditText.text.toString()
 
-                // Upload post with PostDataManager
-                PostDataManager.updatePost(lifecycleOwner, recycleAdapter, newPost)
+                    // Create new post with title, content and temporary ID.
+                    val newPost = PostItem(posts[pos].id, postTitle, postContent, posts[pos].status)
 
-                //dismiss dialog.
-                mAlertDialog.dismiss()
+                    // Upload post with PostDataManager
+                    PostDataManager.updatePost(lifecycleOwner, recycleAdapter, newPost)
+
+                    //dismiss dialog.
+                    mAlertDialog.dismiss()
+                }
             }
             //cancel button click of custom layout
             customDialogView.dialogCancelButton.setOnClickListener {
