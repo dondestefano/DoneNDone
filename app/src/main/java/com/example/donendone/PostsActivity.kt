@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.new_post_dialog.view.*
 
+//The actual app-screen.
+//Uses postRecyclerView to display each post and the addButton to add new ones.
+
 class PostsActivity : AppCompatActivity() {
 
     lateinit var postRecyclerView: RecyclerView
@@ -57,7 +60,7 @@ class PostsActivity : AppCompatActivity() {
             }
 
             else {
-                //get text from EditTexts.
+                //Get text from EditTexts.
                 val postTitle = customDialogView.dialogTitleEditText.text.toString()
                 val postContent = customDialogView.dialogContentEditText.text.toString()
 
@@ -67,11 +70,11 @@ class PostsActivity : AppCompatActivity() {
                 // Upload post with PostDataManager
                 PostDataManager.uploadPost(this, postRecyclerView.adapter as PostRecycleAdapter, newPost)
 
-                //dismiss dialog.
+                //Dismiss dialog.
                 mAlertDialog.dismiss()
             }
         }
-        //cancel button click of custom layout
+        //Cancel button click of custom layout
         customDialogView.dialogCancelButton.setOnClickListener {
             // Dismiss the dialog if the user cancels.
             mAlertDialog.dismiss()

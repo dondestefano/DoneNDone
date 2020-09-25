@@ -6,6 +6,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.liveData
 import retrofit2.Response
 
+//Object used to send requests to the API.
+
 object PostDataManager {
     val posts = mutableListOf<PostItem>()
     val postService = RetrofitInstance
@@ -19,7 +21,7 @@ object PostDataManager {
             emit(response)
         }
 
-        // Wait for the response and add the received Posts to PostDataManager.
+        // Wait for the response and add the received posts to PostDataManagers Posts.
         responseLiveData.observe(lifecycleOwner, Observer {
             val receivedPosts = it.body()?.listIterator()
             if (receivedPosts!=null) {
@@ -32,6 +34,7 @@ object PostDataManager {
         })
     }
 
+    //Unused function but available if needed.
     fun getPost(lifecycleOwner: LifecycleOwner, id: String): PostItem? {
         var post = PostItem("not found", "Error", "Could not find post", false)
         val pathResponse : LiveData<Response<PostItem>> = liveData {
@@ -69,6 +72,7 @@ object PostDataManager {
         postResponse.observe(lifecycleOwner, Observer {
             val receivedPostItem = it.body()
             if (receivedPostItem != null) {
+                //Replace the old item with the new in posts.
                 var pos = 0
                 for (postItem in posts) {
                     if (postItem.id == receivedPostItem.id) {
@@ -84,6 +88,7 @@ object PostDataManager {
     }
 
     fun deletePost(lifecycleOwner: LifecycleOwner, position: Int, postRecycleAdapter: PostRecycleAdapter) {
+        //Create LiveData asking for a Void response since delete doesn't return anything.
         val pathResponse : LiveData<Response<Void>> = liveData {
             val post = posts[position]
             val response = postService.deletePost(post.id)

@@ -18,6 +18,8 @@ import kotlinx.android.synthetic.main.new_post_dialog.view.*
 import kotlinx.coroutines.delay
 import org.w3c.dom.Text
 
+//Adapter used to display posts on the main screen.
+
 class PostRecycleAdapter(private val context: Context, private val lifecycleOwner: LifecycleOwner) : RecyclerView.Adapter<PostRecycleAdapter.ViewHolder>()  {
     private val layoutInflator = LayoutInflater.from(context)
     var posts  = mutableListOf<PostItem>()
@@ -28,8 +30,10 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
         return ViewHolder(itemView)
     }
 
+    //Determine how many items the RecylcerView should display.
     override fun getItemCount() = posts.size
 
+    //Tell the RecyclerView what to do with its ViewHolders.
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentPost = posts[position]
         holder.postTitleText.text = currentPost?.title
@@ -59,6 +63,7 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
         notifyDataSetChanged()
     }
 
+    //ViewHolder used to inflate each posts layout and add functionality to its buttons and text.
     inner class ViewHolder(postView: View) : RecyclerView.ViewHolder(postView) {
         val postTitleText: TextView = itemView.findViewById<TextView>(R.id.textViewTitle)
         val postContentText: TextView = itemView.findViewById<TextView>(R.id.textViewContent)
@@ -88,28 +93,29 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
                     toast.errorToast()
                 }
                 else {
-                    //get text from EditTexts.
+                    //Get text from EditTexts.
                     val postTitle = customDialogView.dialogTitleEditText.text.toString()
                     val postContent = customDialogView.dialogContentEditText.text.toString()
 
-                    // Create new post with title, content and temporary ID.
+                    //Create new post with title, content and temporary ID.
                     val newPost = PostItem(posts[pos].id, postTitle, postContent, posts[pos].status)
 
-                    // Upload post with PostDataManager
+                    //Upload post with PostDataManager.
                     PostDataManager.updatePost(lifecycleOwner, recycleAdapter, newPost)
 
-                    //dismiss dialog.
+                    //Dismiss dialog.
                     mAlertDialog.dismiss()
                 }
             }
-            //cancel button click of custom layout
+            //Cancel button click of custom layout.
             customDialogView.dialogCancelButton.setOnClickListener {
-                // Dismiss the dialog if the user cancels.
+                //Dismiss the dialog if the user cancels.
                 mAlertDialog.dismiss()
             }
         }
 
         init {
+            //Set function delete-icon.
             deleteButton.setOnClickListener {
                 val dialogBuilder = AlertDialog.Builder(context)
                 dialogBuilder.setTitle("Delete to-do?")
@@ -123,12 +129,13 @@ class PostRecycleAdapter(private val context: Context, private val lifecycleOwne
                     })
                     .show()
             }
-
+            //Set function for update-icon.
             updateButton.setOnClickListener {
                 showUpdatePostDialog()
             }
-
+            //Set function for the checkbox.
             statusCheckBox.setOnClickListener{
+                //Get the post and make a PUT request to update its status.
                 var post = posts[pos]
                 post.status =! post.status
                 PostDataManager.updatePost(lifecycleOwner, recycleAdapter, post)

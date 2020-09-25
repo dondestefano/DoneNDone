@@ -4,6 +4,8 @@ import com.google.gson.GsonBuilder
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
+//RetrofitInstance is used to send request and handle response.
+
 class RetrofitInstance {
     companion object {
         const val FIREBASE_URL = "https://us-central1-doneapi.cloudfunctions.net/"

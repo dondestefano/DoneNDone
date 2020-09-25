@@ -3,6 +3,8 @@ package com.example.donendone
 import retrofit2.Response
 import retrofit2.http.*
 
+//Interface to be used with RetrofitInstance.
+
 interface PostService {
     @GET("post")
     suspend fun getPost(): Response<Posts>
