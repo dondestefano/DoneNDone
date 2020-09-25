@@ -9,15 +9,12 @@ const app = express();
 const db = admin.firestore();
 app.use(cors({ origin: ['http://localhost:5000'] }));
 
-// Post functions
-
-//* Endpoint *//
 exports.post = functions.https.onRequest(app);
 
 //* Collection references *//
 const postCollection = db.collection("posts")
 
-// Get all posts.
+//Get all posts.
 app.get('/', async (req, res) => {
     try {
         const result = await postCollection.get();
@@ -38,7 +35,7 @@ app.get('/', async (req, res) => {
 
 });
 
-// Get a single post
+//Get a single post
 app.get('/:id', async (req, res) => {
   try {
     const result = await postCollection.doc(req.params.id).get();
@@ -58,7 +55,7 @@ app.get('/:id', async (req, res) => {
   }
 });
 
-// Create post
+//Create post
 app.post('/', async (req, res) => {
 try {
     const post = (req.body)
@@ -68,6 +65,7 @@ try {
     }
 
     let docRef = postCollection.doc();
+    //Add ID to the post after it has been created.
     const newPost = {
         ...post,
         id: docRef.id
@@ -83,7 +81,7 @@ catch(error) {
 
 });
 
-// Update post
+//Update post
 app.put('/:id', async (req, res) => {
     const body = req.body;
     const postToUpdate = postCollection.doc(req.params.id)
@@ -92,7 +90,7 @@ app.put('/:id', async (req, res) => {
     res.status(200).send(body);
 });
 
-// Delete post
+//Delete post
 app.delete('/:id', async (req, res) => {
   try {
     const userRef = postCollection.doc(req.params.id);
